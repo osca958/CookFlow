@@ -1,9 +1,12 @@
 const router = require('express').Router();
 const c = require('../controllers/visitasController');
+const auth = require('../middleware/auth');
 
-router.get('/usuario/:USid', c.getVisitasUsuario);
+router.use(auth);   // todas las rutas de visitas requieren login
+
+router.get('/', c.getVisitasUsuario);
 router.post('/', c.insertVisita);
-router.put('/:USid/:RESid', c.updateVisita);
-router.delete('/:USid/:RESid', c.deleteVisita);
+router.put('/:RESid', c.updateVisita);
+router.delete('/:RESid', c.deleteVisita);
 
 module.exports = router;

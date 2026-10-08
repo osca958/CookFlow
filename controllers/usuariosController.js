@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs');
 const { getConnection } = require('../db/connection');
 const { esIdValido, manejarError } = require('../db/helpers');
@@ -29,7 +30,7 @@ exports.registro = async (req, res) => {
     } catch (err) { manejarError(err, res, 'Error registrando usuario'); }
 };
 
-// POST /usuarios/login
+
 exports.login = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -39,13 +40,18 @@ exports.login = async (req, res) => {
         const r = await pool.request().input('email', email).execute('SP_GetUsuarioByEmail');
         const usuario = r.recordset[0];
 
-        // Mismo mensaje en ambos casos para no revelar qué emails existen
         if (!usuario || !(await bcrypt.compare(password, usuario.USpassword))) {
             return res.status(401).json({ error: 'Email o contraseña incorrectos' });
         }
 
+        const token = jwt.sign(
+            { USid: usuario.USid },
+            process.env.JWT_SECRET,
+            { expiresIn: process.env.JWT_EXPIRES || '2h' }
+        );
+
         const { USpassword, ...publico } = usuario;
-        res.json(publico);   // más adelante aquí devolveremos un token JWT
+        res.json({ usuario: publico, token });
     } catch (err) { manejarError(err, res, 'Error en el login'); }
 };
 
@@ -71,6 +77,8 @@ exports.updateUsuario = async (req, res) => {
     try {
         const { nombre, email } = req.body;
         if (!esIdValido(req.params.id) || !nombre || !email) return res.status(400).json({ error: 'Datos no válidos' });
+        if (Number(req.params.id) !== req.usuario.USid) return res.status(403).json({ error: 'No puedes modificar a otro usuario' });
+
         const pool = await getConnection();
         const r = await pool.request()
             .input('USid', req.params.id)
@@ -85,6 +93,8 @@ exports.updateUsuario = async (req, res) => {
 exports.deleteUsuario = async (req, res) => {
     try {
         if (!esIdValido(req.params.id)) return res.status(400).json({ error: 'Id no válido' });
+        if (Number(req.params.id) !== req.usuario.USid) return res.status(403).json({ error: 'No puedes eliminar a otro usuario' });
+
         const pool = await getConnection();
         const r = await pool.request().input('USid', req.params.id).execute('SP_DeleteUsuario');
         if (r.recordset[0].filas === 0) return res.status(404).json({ error: 'Usuario no encontrado' });
