@@ -2,19 +2,17 @@ const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/recetasController');
 
-// Todas las recetas
+
 router.get('/', controller.getRecetas);
-
-// Ingredientes de una receta
-router.get('/:id/ingredientes', controller.getIngredientesReceta);
-
-// Recetas por categoría
 router.get('/categoria/:id', controller.getRecetasPorCategoria);
-
-// Crear receta
+router.get('/:id', controller.getRecetaById);
 router.post('/', controller.insertReceta);
+router.put('/:id', controller.updateReceta);
+router.delete('/:id', controller.deleteReceta);
 
-// Añadir ingrediente a receta
+router.get('/:id/ingredientes', controller.getIngredientesReceta);
 router.post('/:id/ingredientes', controller.insertIngredienteReceta);
+router.put('/:id/ingredientes/:INid', controller.updateIngredienteReceta);
+router.delete('/:id/ingredientes/:INid', controller.deleteIngredienteReceta);
 
 module.exports = router;
