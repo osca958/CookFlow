@@ -29,9 +29,9 @@ function getConnection() {
                 return pool;
             })
             .catch(err => {
-                poolPromise = null; // permite reintentar en la siguiente petición
+                poolPromise = null; 
                 console.error('Error de conexión a SQL Server:', err.message);
-                throw err;          // no se traga el error
+                throw err;          
             });
     }
     return poolPromise;
