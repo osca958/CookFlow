@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CookFlow</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="cabecera">
+    <a class="logo" href="index.html">🍳 CookFlow</a>
+    <nav id="nav"></nav>
+  </header>
+
+  <main class="contenedor">
+    <h1>Recetas</h1>
+
+    <div class="filtros">
+      <input id="buscador" type="search" placeholder="Buscar receta...">
+      <select id="categoria">
+        <option value="">Todas las categorías</option>
+      </select>
+    </div>
+
+    <p id="estado" class="estado"></p>
+    <section id="lista" class="rejilla"></section>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/recetas.js"></script>
+</body>
+</html>

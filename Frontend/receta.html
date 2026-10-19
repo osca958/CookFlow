@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Receta - CookFlow</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="cabecera">
+    <a class="logo" href="index.html">🍳 CookFlow</a>
+    <nav id="nav"></nav>
+  </header>
+
+  <main class="contenedor">
+    <a href="index.html" class="volver">← Volver a recetas</a>
+    <p id="estado" class="estado"></p>
+
+    <article id="receta" hidden>
+      <div id="foto" class="foto-detalle"></div>
+      <h1 id="titulo"></h1>
+      <div id="datos" class="etiquetas"></div>
+      <div id="acciones" class="acciones"></div>
+      <p id="mensaje" class="mensaje"></p>
+
+      <h2>Ingredientes</h2>
+      <ul id="ingredientes" class="ingredientes"></ul>
+
+      <h2>Preparación</h2>
+      <p id="descripcion" class="descripcion"></p>
+    </article>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/receta.js"></script>
+</body>
+</html>
