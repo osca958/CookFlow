@@ -1,10 +1,11 @@
 const { getConnection } = require('../db/connection');
 const { esIdValido, manejarError } = require('../db/helpers');
 
-async function comprobarPropietario(pool, RECid, USid) {
+async function comprobarPropietario(pool, RECid, usuario) {
     const r = await pool.request().input('RECid', RECid).execute('SP_GetRecetaById');
     if (r.recordset.length === 0) return 'noexiste';
-    return r.recordset[0].USid === USid ? 'ok' : 'ajena';
+    const esDueno = r.recordset[0].USid === usuario.USid;
+    return (esDueno || usuario.rol === 'admin') ? 'ok' : 'ajena';
 }
 
 function responderPropiedad(estado, res) {
@@ -77,13 +78,13 @@ exports.insertReceta = async (req, res) => {
 exports.updateReceta = async (req, res) => {
     try {
         if (!esIdValido(req.params.id)) return res.status(400).json({ error: 'Id no válido' });
-        const { titulo, descripcion, imagen, tiempo, dificultad, CAid } = req.body;
+        const { titulo, descripcion, imagen, tiempo, dificultad, CAid } = req.body || {};
         if (!titulo || !esIdValido(CAid)) {
             return res.status(400).json({ error: 'Faltan datos: titulo y CAid son obligatorios' });
         }
         const pool = await getConnection();
-        const estado = await comprobarPropietario(pool, req.params.id, req.usuario.USid);
-            if (estado !== 'ok') return responderPropiedad(estado, res);
+        const estado = await comprobarPropietario(pool, req.params.id, req.usuario);
+        if (estado !== 'ok') return responderPropiedad(estado, res);
         const result = await pool.request()
             .input('RECid', req.params.id)
             .input('titulo', titulo)
@@ -102,8 +103,8 @@ exports.deleteReceta = async (req, res) => {
     try {
         if (!esIdValido(req.params.id)) return res.status(400).json({ error: 'Id no válido' });
         const pool = await getConnection();
-        const estado = await comprobarPropietario(pool, req.params.id, req.usuario.USid);
-            if (estado !== 'ok') return responderPropiedad(estado, res);
+        const estado = await comprobarPropietario(pool, req.params.id, req.usuario);
+        if (estado !== 'ok') return responderPropiedad(estado, res);
         const result = await pool.request()
             .input('RECid', req.params.id)
             .execute('SP_DeleteReceta');
@@ -115,13 +116,13 @@ exports.deleteReceta = async (req, res) => {
 exports.insertIngredienteReceta = async (req, res) => {
     try {
         const RECid = req.params.id;
-        const { INid, cantidad, unidad } = req.body;
+        const { INid, cantidad, unidad } = req.body || {};
         if (!esIdValido(RECid) || !esIdValido(INid) || cantidad == null) {
             return res.status(400).json({ error: 'Faltan datos: INid y cantidad son obligatorios' });
         }
         const pool = await getConnection();
-        const estado = await comprobarPropietario(pool, req.params.id, req.usuario.USid);
-            if (estado !== 'ok') return responderPropiedad(estado, res);
+        const estado = await comprobarPropietario(pool, RECid, req.usuario);
+        if (estado !== 'ok') return responderPropiedad(estado, res);
         await pool.request()
             .input('RECid', RECid)
             .input('INid', INid)
@@ -135,13 +136,13 @@ exports.insertIngredienteReceta = async (req, res) => {
 exports.updateIngredienteReceta = async (req, res) => {
     try {
         const { id, INid } = req.params;
-        const { cantidad, unidad } = req.body;
+        const { cantidad, unidad } = req.body || {};
         if (!esIdValido(id) || !esIdValido(INid) || cantidad == null) {
             return res.status(400).json({ error: 'Datos no válidos' });
         }
         const pool = await getConnection();
-        const estado = await comprobarPropietario(pool, req.params.id, req.usuario.USid);
-            if (estado !== 'ok') return responderPropiedad(estado, res);
+        const estado = await comprobarPropietario(pool, id, req.usuario);
+        if (estado !== 'ok') return responderPropiedad(estado, res);
         const result = await pool.request()
             .input('RECid', id)
             .input('INid', INid)
@@ -159,8 +160,8 @@ exports.deleteIngredienteReceta = async (req, res) => {
         const { id, INid } = req.params;
         if (!esIdValido(id) || !esIdValido(INid)) return res.status(400).json({ error: 'Datos no válidos' });
         const pool = await getConnection();
-        const estado = await comprobarPropietario(pool, req.params.id, req.usuario.USid);
-            if (estado !== 'ok') return responderPropiedad(estado, res);
+        const estado = await comprobarPropietario(pool, id, req.usuario);
+        if (estado !== 'ok') return responderPropiedad(estado, res);
         const result = await pool.request()
             .input('RECid', id)
             .input('INid', INid)

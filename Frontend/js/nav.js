@@ -15,6 +15,11 @@
     nav.appendChild(enlace('Favoritos', 'favoritos.html'));
     nav.appendChild(enlace('Mis listas', 'listas.html'));
 
+    const u = getUsuario();
+    if (u && u.USrol === 'admin') {
+      nav.appendChild(enlace('Admin', 'admin.html'));
+    }
+
     const usuario = getUsuario();
     if (usuario && usuario.USnombre) {
       const saludo = document.createElement('span');
