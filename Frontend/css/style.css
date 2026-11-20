@@ -129,3 +129,7 @@ nav a:hover, nav button:hover { color: var(--naranja); }
 .caja-lista { display: inline-flex; gap: 8px; margin-left: 12px; }
 .caja-lista select { padding: 9px; font: inherit; border: 1px solid var(--borde); border-radius: 8px; background: #fff; }
 .acciones { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+
+.titulo-lista { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.titulo-lista h1 { margin: 0; }
+.nueva-lista input[type="text"] { width: 260px; }

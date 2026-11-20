@@ -96,7 +96,7 @@ async function pintarAcciones() {
     listas.forEach(l => {
       const op = document.createElement('option');
       op.value = l.LCid;
-      op.textContent = new Date(l.LCfecha).toLocaleDateString('es-ES') + ' · ' + (l.LCpax || 1) + ' pax';
+      op.textContent = l.LCnombre + ' · ' + (l.LCpax || 1) + ' pax';
       select.appendChild(op);
     });
     if (!listas.length) {

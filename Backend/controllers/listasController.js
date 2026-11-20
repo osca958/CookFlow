@@ -13,16 +13,38 @@ exports.getListas = async (req, res) => {
 
 exports.insertLista = async (req, res) => {
     try {
-        const { pax } = req.body || {};
+        const { pax, nombre } = req.body || {};
         const paxFinal = pax == null ? 1 : pax;
         if (!paxValido(paxFinal)) return res.status(400).json({ error: 'pax debe ser un entero entre 1 y 50' });
+        if (nombre != null && String(nombre).length > 100) {
+            return res.status(400).json({ error: 'El nombre no puede superar los 100 caracteres' });
+        }
         const pool = await getConnection();
         const r = await pool.request()
             .input('USid', req.usuario.USid)
             .input('pax', paxFinal)
+            .input('nombre', nombre || null)
             .execute('SP_InsertLista');
         res.status(201).json({ id: r.recordset[0].id, mensaje: 'Lista creada' });
     } catch (err) { manejarError(err, res, 'Error creando lista'); }
+};
+
+exports.updateLista = async (req, res) => {
+    try {
+        const { nombre } = req.body || {};
+        if (!esIdValido(req.params.id)) return res.status(400).json({ error: 'Id no válido' });
+        if (nombre != null && String(nombre).length > 100) {
+            return res.status(400).json({ error: 'El nombre no puede superar los 100 caracteres' });
+        }
+        const pool = await getConnection();
+        const r = await pool.request()
+            .input('LCid', req.params.id)
+            .input('USid', req.usuario.USid)
+            .input('nombre', nombre || null)
+            .execute('SP_UpdateLista');
+        if (r.recordset[0].filas === 0) return res.status(404).json({ error: 'Lista no encontrada' });
+        res.json({ mensaje: 'Lista actualizada' });
+    } catch (err) { manejarError(err, res, 'Error actualizando lista'); }
 };
 
 exports.getListaById = async (req, res) => {

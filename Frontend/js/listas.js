@@ -14,8 +14,8 @@ function crearItem(l) {
 
   const enlace = document.createElement('a');
   enlace.href = 'lista.html?id=' + l.LCid;
-  enlace.textContent = 'Lista del ' + formatearFecha(l.LCfecha) + ' · ' + (l.LCpax || 1) + ' pax';
-
+  enlace.textContent = l.LCnombre + ' · ' + (l.LCpax || 1) + ' pax';
+  
   const borrar = document.createElement('button');
   borrar.className = 'btn-quitar btn-inline';
   borrar.textContent = 'Eliminar';
@@ -48,7 +48,9 @@ form.addEventListener('submit', async (e) => {
   try {
     const r = await api('/listas', {
       method: 'POST',
-      body: JSON.stringify({ pax: Number(document.getElementById('pax').value) })
+      body: JSON.stringify({ 
+        nombre: document.getElementById('nombre').value.trim(),
+        pax: Number(document.getElementById('pax').value) })
     });
     location.href = 'lista.html?id=' + r.id;
   } catch (err) { estado.textContent = err.message; }

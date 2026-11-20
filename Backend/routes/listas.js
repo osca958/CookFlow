@@ -12,7 +12,7 @@ router.delete('/:id', c.deleteLista);
 router.post('/:id/items', c.insertItem);
 router.put('/:id/items/:INid', c.updateItem);
 router.delete('/:id/items/:INid', c.deleteItem);
-
+router.put('/:id', c.updateLista);
 router.post('/:id/receta/:RECid', c.addReceta);
 
 module.exports = router;
