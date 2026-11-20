@@ -82,7 +82,9 @@ function pintarAcciones() {
       try {
         await api('/favoritos/' + id, { method: 'POST' });
         aviso('Añadida a favoritos');
-      } catch (err) { aviso(err.message, true); }
+      } catch (err) {
+        aviso(err.message.includes('Ya existe') ? 'Ya está en tus favoritos' : err.message, true);
+      }
     })
   );
 }

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro - CookFlow</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="cabecera">
+    <a class="logo" href="index.html">🍳 CookFlow</a>
+    <nav id="nav"></nav>
+  </header>
+
+  <main class="contenedor">
+    <form id="form" class="formulario">
+      <h1>Crear cuenta</h1>
+
+      <label for="nombre">Nombre</label>
+      <input id="nombre" type="text" required maxlength="100" autocomplete="name">
+
+      <label for="email">Email</label>
+      <input id="email" type="email" required maxlength="100" autocomplete="email">
+
+      <label for="password">Contraseña (mínimo 6 caracteres)</label>
+      <input id="password" type="password" required minlength="6" autocomplete="new-password">
+
+      <label for="password2">Repite la contraseña</label>
+      <input id="password2" type="password" required minlength="6" autocomplete="new-password">
+      
+      <p id="mensaje" class="mensaje error"></p>
+      <button class="btn" type="submit">Registrarme</button>
+
+      <p class="alterno">¿Ya tienes cuenta? <a href="login.html">Inicia sesión</a></p>
+    </form>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

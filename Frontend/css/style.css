@@ -87,3 +87,28 @@ nav a:hover, nav button:hover { color: var(--naranja); }
 
 .ingredientes { padding-left: 20px; line-height: 1.8; }
 .descripcion { line-height: 1.6; white-space: pre-line; }
+
+.formulario {
+  max-width: 380px; margin: 40px auto; padding: 28px;
+  background: #fff; border: 1px solid var(--borde); border-radius: 12px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.formulario h1 { margin: 0 0 8px; font-size: 1.5rem; }
+.formulario label { font-size: .9rem; color: var(--gris); margin-top: 6px; }
+.formulario input {
+  padding: 10px 12px; font: inherit;
+  border: 1px solid var(--borde); border-radius: 8px;
+}
+.formulario .btn { margin-top: 12px; }
+.formulario .btn:disabled { opacity: .6; cursor: wait; }
+.alterno { margin: 12px 0 0; font-size: .9rem; color: var(--gris); text-align: center; }
+.alterno a { color: var(--naranja); }
+.saludo { color: var(--gris); font-size: .9rem; }
+.tarjeta .enlace-tarjeta { display: block; text-decoration: none; color: inherit; }
+.btn-quitar {
+  width: calc(100% - 28px); margin: 0 14px 14px; padding: 8px;
+  font: inherit; cursor: pointer; background: #fff;
+  color: #c92a2a; border: 1px solid #f1c0c0; border-radius: 8px;
+}
+.btn-quitar:hover { background: #fff5f5; }
+.btn-quitar:disabled { opacity: .6; cursor: wait; }
