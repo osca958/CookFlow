@@ -68,25 +68,56 @@ async function cargar() {
   }
 }
 
-function pintarAcciones() {
+async function pintarAcciones() {
   const acciones = document.getElementById('acciones');
   if (!getToken()) {
     const a = document.createElement('a');
-    a.href = 'login.html';
+    a.href = 'login.html?volver=' + encodeURIComponent('receta.html?id=' + id);
     a.textContent = 'Inicia sesión para guardar favoritos y crear listas de la compra';
     acciones.replaceChildren(a);
     return;
   }
-  acciones.replaceChildren(
-    boton('♥ Añadir a favoritos', async () => {
-      try {
-        await api('/favoritos/' + id, { method: 'POST' });
-        aviso('Añadida a favoritos');
-      } catch (err) {
-        aviso(err.message.includes('Ya existe') ? 'Ya está en tus favoritos' : err.message, true);
-      }
-    })
-  );
+
+  const fav = boton('♥ Añadir a favoritos', async () => {
+    try {
+      await api('/favoritos/' + id, { method: 'POST' });
+      aviso('Añadida a favoritos');
+    } catch (err) {
+      aviso(err.message.includes('Ya existe') ? 'Ya está en tus favoritos' : err.message, true);
+    }
+  });
+
+  const caja = document.createElement('span');
+  caja.className = 'caja-lista';
+  const select = document.createElement('select');
+
+  try {
+    const listas = await api('/listas');
+    listas.forEach(l => {
+      const op = document.createElement('option');
+      op.value = l.LCid;
+      op.textContent = new Date(l.LCfecha).toLocaleDateString('es-ES') + ' · ' + (l.LCpax || 1) + ' pax';
+      select.appendChild(op);
+    });
+    if (!listas.length) {
+      const op = document.createElement('option');
+      op.value = '';
+      op.textContent = 'Sin listas (créala en Mis listas)';
+      select.appendChild(op);
+      select.disabled = true;
+    }
+  } catch (err) { /* si falla, el selector queda vacío */ }
+
+  const anadir = boton('🛒 Añadir a la lista', async () => {
+    if (!select.value) return aviso('Primero crea una lista en "Mis listas"', true);
+    try {
+      await api('/listas/' + select.value + '/receta/' + id, { method: 'POST' });
+      aviso('Ingredientes añadidos a la lista');
+    } catch (err) { aviso(err.message, true); }
+  });
+
+  caja.append(select, anadir);
+  acciones.replaceChildren(fav, caja);
 }
 
 cargar();

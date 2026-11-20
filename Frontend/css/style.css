@@ -112,3 +112,20 @@ nav a:hover, nav button:hover { color: var(--naranja); }
 }
 .btn-quitar:hover { background: #fff5f5; }
 .btn-quitar:disabled { opacity: .6; cursor: wait; }
+
+.nueva-lista { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 20px; }
+.nueva-lista input { width: 80px; padding: 10px 12px; font: inherit; border: 1px solid var(--borde); border-radius: 8px; }
+
+.listas, .sin-puntos { list-style: none; padding: 0; }
+.lista-item {
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  padding: 12px 16px; margin-bottom: 8px;
+  background: #fff; border: 1px solid var(--borde); border-radius: 8px;
+}
+.lista-item a { color: var(--texto); text-decoration: none; font-weight: 600; }
+.lista-item a:hover { color: var(--naranja); }
+.btn-inline { width: auto; margin: 0; padding: 6px 12px; }
+
+.caja-lista { display: inline-flex; gap: 8px; margin-left: 12px; }
+.caja-lista select { padding: 9px; font: inherit; border: 1px solid var(--borde); border-radius: 8px; background: #fff; }
+.acciones { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
